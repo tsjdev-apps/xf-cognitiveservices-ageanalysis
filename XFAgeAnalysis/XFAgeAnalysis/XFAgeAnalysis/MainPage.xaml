@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="XFAgeAnalysis.MainPage"
+             BindingContext="{Binding AgeAnalyzeViewModel, Source={x:StaticResource ViewModelLocator}}"
+             Title="Age Analyzer"
+             Padding="16"
+             Visual="Material">
+
+    <ContentPage.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor"
+                    Value="#CC0000" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,100,Auto">
+
+        <Image Source="{Binding ImageBytes, Converter={StaticResource BytesToImageConverter}}"
+               Aspect="AspectFit"
+               VerticalOptions="Start"
+               HorizontalOptions="Center"
+               Grid.Row="0" />
+
+        <StackLayout IsVisible="{Binding AnalyzedAge, Converter={StaticResource NullToBoolConverter}}"
+                     Grid.Row="1">
+            <Label Text="{Binding AnalyzedAge, StringFormat='Age: {0}'}"
+                   FontSize="Large" />
+        </StackLayout>
+
+        <ActivityIndicator WidthRequest="25"
+                           HeightRequest="25"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           Color="#CC0000"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Grid.Row="1" />
+
+        <Grid RowDefinitions="Auto,Auto"
+              ColumnDefinitions="*,*"
+              Grid.Row="2">
+
+            <Button Text="TAKE A PICTURE"
+                    Command="{Binding TakePictureCommand}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                    Grid.Row="0"
+                    Grid.Column="0" />
+
+            <Button Text="PICK A PICTURE"
+                    Command="{Binding PickPictureCommand}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                    Grid.Row="0"
+                    Grid.Column="1" />
+
+            <Button Text="ANALYZE PICTURE"
+                    Command="{Binding AnalyzePictureCommand}"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2" />
+
+        </Grid>
+    </Grid>
+
+</ContentPage>
